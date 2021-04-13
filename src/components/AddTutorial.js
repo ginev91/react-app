@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import TutorialDataService from "../services/TutorialService";
+import { useAuth } from "../contexts/AuthContext";
+import auth from "../firebase"
 
 const AddTutorial = () => {
   const initialTutorialState = {
     title: "",
     description: "",
-    published: false
+    published: false,
+    deleted: false,
+    author: ""
   };
   const [tutorial, setTutorial] = useState(initialTutorialState);
   const [submitted, setSubmitted] = useState(false);
@@ -16,11 +20,13 @@ const AddTutorial = () => {
   };
 
   const saveTutorial = () => {
-    var data = {
+    let data = {
       title: tutorial.title,
       description: tutorial.description,
-      published: false
+      published: false,
+      deleted: false
     };
+   
 
     TutorialDataService.create(data)
       .then(() => {

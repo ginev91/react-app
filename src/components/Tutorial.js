@@ -7,6 +7,7 @@ const Tutorial = (props) => {
     title: "",
     description: "",
     published: false,
+    deleted: false
   };
   const [currentTutorial, setCurrentTutorial] = useState(initialTutorialState);
   const [message, setMessage] = useState("");
@@ -48,16 +49,16 @@ const Tutorial = (props) => {
       });
   };
 
-  const deleteTutorial = () => {
-    TutorialDataService.remove(currentTutorial.key)
+  const deleteTutorial = (status) => {
+    TutorialDataService.remove(currentTutorial.key, { deleted: status })
       .then(() => {
-        props.refreshList();
+        setCurrentTutorial({ ...currentTutorial, deleted: status });
+        setMessage("The status was deleted successfully!");
       })
       .catch((e) => {
         console.log(e);
       });
   };
-
   return (
     <div>
       {currentTutorial ? (
@@ -111,9 +112,22 @@ const Tutorial = (props) => {
             </button>
           )}
 
-          <button className="badge badge-danger mr-2" onClick={deleteTutorial}>
-            Delete
-          </button>
+{currentTutorial.deleted ? (
+            <button
+              className="badge badge-primary mr-2"
+              onClick={() => deleteTutorial(false)}
+            >
+              Restore
+            </button>
+          ) : (
+            <button
+              className="badge badge-primary mr-2"
+              onClick={() => deleteTutorial(true)}
+            >
+              Delete
+            </button>
+          )}
+          
 
           <button
             type="submit"

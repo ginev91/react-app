@@ -14,12 +14,12 @@ const update = (key, data) => {
   return db.child(key).update(data);
 };
 
-const remove = (key) => {
-  return db.child(key).remove();
+const remove = (key,data) => {
+  return db.child(key).update(data);
 };
 
 const removeAll = () => {
-  return db.remove();
+  return db.update();
 };
 
 export default {
