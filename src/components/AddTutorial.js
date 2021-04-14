@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import TutorialDataService from "../services/TutorialService";
-import { useAuth } from "../contexts/AuthContext";
-import auth from "../firebase"
+import firebase from "firebase";
+
+
 
 const AddTutorial = () => {
+  let user = firebase.auth().currentUser;
   const initialTutorialState = {
     title: "",
     description: "",
@@ -24,7 +26,9 @@ const AddTutorial = () => {
       title: tutorial.title,
       description: tutorial.description,
       published: false,
-      deleted: false
+      deleted: false,
+      author: user.email
+
     };
    
 

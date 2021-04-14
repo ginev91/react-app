@@ -4,36 +4,31 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import { useAuth } from "../contexts/AuthContext"
+import { useAuth } from "./contexts/AuthContext"
+import firebase from "firebase";
 
 
 import AddTutorial from "./components/AddTutorial";
 import TutorialsList from "./components/TutorialsList";
+import MyTutorials from "./components/MyTutorials";
 
-  function Logout() {
-  const { logout } = useAuth()
+  
+function App() {
+
   const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
+  const { currentUser, logout } = useAuth()
   const history = useHistory()
 
- async function handleSubmit(e) {
-  e.preventDefault()
-
-  try {
+  async function handleLogout() {
     setError("")
-    setLoading(true)
-    await logout()
-    history.push("/")
-  } catch {
-    setError("Failed to log out")
+
+    try {
+      await logout()
+      history.push("/")
+    } catch {
+      setError("Failed to log out")
+    }
   }
-
-  setLoading(false)
-
-}
-}
-
-function App() {
   
   return (
     <div>
@@ -48,7 +43,7 @@ function App() {
             </Link>
           </li>
           <li className="nav-item">
-            <Link to={"/tutorials"} className="nav-link">
+            <Link to={"/MyTutorials"} className="nav-link">
               My tutorials
             </Link>
           </li>
@@ -66,7 +61,7 @@ function App() {
           
           <li className="nav-item">
             <Link to={"/tutorials"} className="nav-link">
-            <button onClick={handleSubmit} type="submit">
+            <button className="nav-item" onClick={handleLogout} type="submit">
               Log Out
               </button>
             </Link>
@@ -94,6 +89,7 @@ function App() {
           <Route exact path="/add" component={AddTutorial} />
           <Route exact path="/Login" component={Login} />
           <Route exact path="/Register" component={Register} />
+          <Route exact path="/MyTutorials" component={MyTutorials} />
         </Switch>
       </div>
     </div>
