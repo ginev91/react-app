@@ -6,6 +6,18 @@ const getAll = () => {
   return db;
 };
 
+const getMy = (author) => {
+  return db.orderByChild("author").equalTo(author);
+};
+
+
+const getDeleted = () => {
+  let deleted = db.orderByChild("deleted").equalTo(true);
+  return deleted;
+
+  
+};
+
 const create = (data) => {
   return db.push(data);
 };
@@ -28,4 +40,6 @@ export default {
   update,
   remove,
   removeAll,
+  getMy,
+  getDeleted
 };

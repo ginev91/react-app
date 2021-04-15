@@ -4,18 +4,19 @@ import TutorialDataService from "../services/TutorialService";
 import Tutorial from "./Tutorial";
 import firebase from "firebase";
 
-let user = new Promise((resolve , reject) =>
-firebase.auth().onAuthStateChanged((user) =>
-  resolve(user), (e) => reject(e)));
 
 
-const TutorialsList = () => {
- 
+
+const MyTutorials = () => {
+
+    
+ let user = firebase.auth().currentUser;
+ console.log(user.email)
   const [currentTutorial, setCurrentTutorial] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
 
  
-  const [tutorials, loading, error] = useList(TutorialDataService.getAll());
+  const [tutorials, loading, error] = useList(TutorialDataService.getMy(user.email));
 
 
   const refreshList = () => {
@@ -37,7 +38,6 @@ const TutorialsList = () => {
 
     setCurrentIndex(index);
   };
-console.log(user)
   const removeAllTutorials = () => {
     TutorialDataService.removeAll()
       .then(() => {
@@ -51,22 +51,29 @@ console.log(user)
   return (
     <div className="list row">
       <div className="col-md-6">
-        <h4>Tutorials List</h4>
+        <h4> {user.email.toUpperCase()} Tutorials List</h4>
 
         {error && <strong>Error: {error}</strong>}
         {loading && <span>Loading...</span>}
         <ul className="list-group">
-          {user.email && !loading &&
+          {!loading &&
             tutorials &&
             tutorials.map((tutorial, index) => (
-              <li
+                  
+               
+                 
+              <li 
+                
                 className={"list-group-item " + (index === currentIndex ? "active" : "")}
                 onClick={() => setActiveTutorial(tutorial, index)}
                 key={index}
-              >
-                {tutorial.val().title}
-                {/* tutorial.title */}
+              > 
+            
+                {  tutorial.val().author === user.email ? tutorial.val().title :""}
+               
               </li>
+                   
+              
             ))}
         </ul>
 
@@ -91,4 +98,4 @@ console.log(user)
   );
 };
 
-export default TutorialsList;
+export default MyTutorials;

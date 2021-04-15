@@ -2,43 +2,17 @@ import React, { useState /* useEffect */ } from "react";
 import { useList } from "react-firebase-hooks/database";
 import TutorialDataService from "../services/TutorialService";
 import Tutorial from "./Tutorial";
-
-
+import firebase from "firebase";
 
 const TutorialsList = () => {
-  // const [tutorials, setTutorials] = useState([]);
+ 
   const [currentTutorial, setCurrentTutorial] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(-1);
 
-  /* use react-firebase-hooks */
-  const [tutorials, loading, error] = useList(TutorialDataService.getAll());
+  
+  const [tutorials, loading, error] = useList(TutorialDataService.getDeleted());
 
-  /* manually listen for value events
-  const onDataChange = (items) => {
-    let tutorials = [];
-
-    items.forEach((item) => {
-      let key = item.key;
-      let data = item.val();
-      tutorials.push({
-        key: key,
-        title: data.title,
-        description: data.description,
-        published: data.published,
-      });
-    });
-
-    setTutorials(tutorials);
-  };
-
-  useEffect(() => {
-    TutorialDataService.getAll().on("value", onDataChange);
-
-    return () => {
-      TutorialDataService.getAll().off("value", onDataChange);
-    };
-  }, []);
-  */
+ 
 
   const refreshList = () => {
     setCurrentTutorial(null);
@@ -46,7 +20,7 @@ const TutorialsList = () => {
   };
 
   const setActiveTutorial = (tutorial, index) => {
-    const { title, description, published } = tutorial.val(); /* tutorial */
+    const { title, description, published } = tutorial.val();
 
     setCurrentTutorial({
       key: tutorial.key,

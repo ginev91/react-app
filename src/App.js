@@ -6,11 +6,11 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import { useAuth } from "./contexts/AuthContext"
 import firebase from "firebase";
-
-
 import AddTutorial from "./components/AddTutorial";
 import TutorialsList from "./components/TutorialsList";
 import MyTutorials from "./components/MyTutorials";
+import DeletedTutorials from "./components/DeletedTutorials";
+
 
   
 function App() {
@@ -29,57 +29,86 @@ function App() {
       setError("Failed to log out")
     }
   }
+
+  let user = firebase.auth().currentUser;
   
   return (
+    
     <div>
       <nav className="navbar navbar-expand-sm bg-primary navbar-dark">
         <a href="/tutorials" className="navbar-brand">
           Exam-tutorials
         </a>
-        <div className="navbar-nav mr-auto">
-          <li className="nav-item">
-            <Link to={"/tutorials"} className="nav-link">
-              Tutorials
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to={"/MyTutorials"} className="nav-link">
-              My tutorials
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to={"/tutorials"} className="nav-link">
-              Deleted tutorials
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to={"/add"} className="nav-link">
-              Add
-            </Link>
-          </li>
 
-          
-          <li className="nav-item">
-            <Link to={"/tutorials"} className="nav-link">
-            <button className="nav-item" onClick={handleLogout} type="submit">
-              Log Out
-              </button>
-            </Link>
-          </li>
-        <li className="nav-item">
-            <Link to={"/Login"} className="nav-link">
-              Login
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to={"/Register"} className="nav-link">
-            Register
-            </Link>
-          </li>
-          
-     
+        {user  ?
+
+<div className="navbar-nav mr-auto">
+<li className="nav-item">
+  <Link to={"/tutorials"} className="nav-link">
+    Tutorials
+  </Link>
+</li>
+<li className="nav-item">
+  <Link to={"/MyTutorials"} className="nav-link">
+    My tutorials
+  </Link>
+</li>
+<li className="nav-item">
+  <Link to={"/DeletedTutorials"} className="nav-link">
+    Deleted tutorials
+  </Link>
+</li>
+<li className="nav-item">
+  <Link to={"/add"} className="nav-link">
+    Add
+  </Link>
+</li>
+
+
+<li className="nav-item">
+  <Link to={"/tutorials"} className="nav-link">
+  <button className="nav-item" onClick={handleLogout} type="submit">
+    Log Out
+    </button>
+  </Link>
+</li>
+
+
+
+
+</div>
+       :
+       
+       <div className="navbar-nav mr-auto">
+<li className="nav-item">
+  <Link to={"/tutorials"} className="nav-link">
+    Tutorials
+  </Link>
+</li>
+
+<li className="nav-item">
+  <Link to={"/DeletedTutorials"} className="nav-link">
+    Deleted tutorials
+  </Link>
+</li>
+
+
+<li className="nav-item">
+  <Link to={"/Login"} className="nav-link">
+    Login
+  </Link>
+</li>
+<li className="nav-item">
+  <Link to={"/Register"} className="nav-link">
+  Register
+  </Link>
+</li>
+
+
+
+</div>
+}
         
-        </div>
       </nav>
 
       <div className="container mt-3">
@@ -90,6 +119,7 @@ function App() {
           <Route exact path="/Login" component={Login} />
           <Route exact path="/Register" component={Register} />
           <Route exact path="/MyTutorials" component={MyTutorials} />
+          <Route exact path="/DeletedTutorials" component={DeletedTutorials} />
         </Switch>
       </div>
     </div>
