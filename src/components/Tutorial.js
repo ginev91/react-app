@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import TutorialDataService from "../services/TutorialService";
 import firebase from "firebase";
+import ReactPlayer from "react-player";
 
 const Tutorial = (props) => {
 
@@ -10,7 +11,8 @@ const Tutorial = (props) => {
     title: "",
     description: "",
     published: false,
-    deleted: false
+    deleted: false,
+    author : ""
   };
   const [currentTutorial, setCurrentTutorial] = useState(initialTutorialState);
   const [message, setMessage] = useState("");
@@ -29,6 +31,7 @@ const Tutorial = (props) => {
   const updatePublished = (status) => {
     TutorialDataService.update(currentTutorial.key, { published: status })
       .then(() => {
+
         setCurrentTutorial({ ...currentTutorial, published: status });
         setMessage("The status was updated successfully!");
       })
@@ -52,10 +55,10 @@ const Tutorial = (props) => {
       });
   };
 
-  const deleteTutorial = (status) => {
-    TutorialDataService.remove(currentTutorial.key, { deleted: status })
+  const deleteTutorial = (status , status1) => {
+    TutorialDataService.remove(currentTutorial.key, { deleted: status , published: status1 })
       .then(() => {
-        setCurrentTutorial({ ...currentTutorial, deleted: status });
+        setCurrentTutorial({ ...currentTutorial, deleted: status , published: status1});
         setMessage("The status was deleted successfully!");
       })
       .catch((e) => {
@@ -64,7 +67,7 @@ const Tutorial = (props) => {
   };
   return (
  <div>
-    {user !== null && user.email === tutorial.author ? 
+    {user !== null && user.email === currentTutorial.author ? 
         <div>
         {currentTutorial ? (
           <div className="edit-form">
@@ -81,16 +84,36 @@ const Tutorial = (props) => {
                   onChange={handleInputChange}
                 />
               </div>
-              <div className="form-group">
+              <div className="form-group" >
                 <label htmlFor="description">Description</label>
-                <input
-                  type="text"
+                <textarea 
+                  type="textarea"
                   className="form-control"
+                  rows={15}
+                  cols={12}
                   id="description"
                   name="description"
                   value={currentTutorial.description}
                   onChange={handleInputChange}
                 />
+              </div>
+              <div className="form-group">
+                <label htmlFor="title">Video Url</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="url"
+                  name="url"
+                  value={currentTutorial.url}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div >
+                <label htmlFor="url">Turorial video</label>
+                
+                <ReactPlayer
+              url={currentTutorial.url}
+              />
               </div>
   
               <div className="form-group">
@@ -100,34 +123,49 @@ const Tutorial = (props) => {
                 {currentTutorial.published ? "Published" : "Pending"}
               </div>
             </form>
+
+            
   
-            {currentTutorial.published ? (
-              <button
-                className="badge badge-primary mr-2"
-                onClick={() => updatePublished(false)}
-              >
-                UnPublish
-              </button>
+            {currentTutorial.published  ? (
+              <a>
+                {!currentTutorial.deleted ? 
+               <button
+               className="badge badge-primary mr-2"
+               onClick={() => updatePublished(false)}
+             >
+               UnPublish
+             </button>  : null}
+              
+              </a>
             ) : (
+
+              <a>
+                {!currentTutorial.deleted ? 
               <button
                 className="badge badge-primary mr-2"
-                onClick={() => updatePublished(true)}
+                onClick={() => updatePublished(true )}
               >
                 Publish
-              </button>
+              </button> : null }
+              </a>
             )}
   
   {currentTutorial.deleted ? (
               <button
                 className="badge badge-primary mr-2"
-                onClick={() => deleteTutorial(false)}
+                onClick={() =>deleteTutorial(false, false)}
+                              
+                  
+                               
               >
                 Restore
               </button>
             ) : (
               <button
                 className="badge badge-primary mr-2"
-                onClick={() => deleteTutorial(true)}
+                onClick={() =>deleteTutorial(true, false)}
+                              
+                           
               >
                 Delete
               </button>
@@ -142,7 +180,10 @@ const Tutorial = (props) => {
               Update
             </button>
             <p>{message}</p>
+
+            <div><p>Author:   {currentTutorial.author}</p></div>
           </div>
+          
         ) : (
           <div>
             <br />
@@ -162,22 +203,75 @@ const Tutorial = (props) => {
           type="text"
           className="form-control"
           id="title"
+          readOnly
           name="title"
           value={currentTutorial.title}
           onChange={handleInputChange}
         />
+        
       </div>
+      {!currentTutorial.deleted ?
+      
       <div className="form-group">
-        <label htmlFor="description">Description</label>
+      <label htmlFor="description">Description</label>
+      <textarea
+        type="textarea"
+        className="form-control"
+       rows={15}
+        cols={12}
+        id="description"
+        readOnly
+        name="description"
+        value={currentTutorial.description}
+        onChange={handleInputChange}
+      />
+
+
+
+{user ? 
+<div>
+              <div className="form-group">
+                <label htmlFor="title">Video Url</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="url"
+                  name="url"
+                  readOnly
+                  value={currentTutorial.url}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div >
+                <label htmlFor="url">Turorial video</label>
+                
+                <ReactPlayer
+              url={currentTutorial.url}
+              />
+              </div>
+      <div><p>Author:   {currentTutorial.author}</p></div>
+      </div> :
+ 
+      <div><h1>In order to see the videos please login or register.</h1></div>}
+ 
+    </div> 
+    
+    
+        :
+
+        <div className="form-group">
+        <label htmlFor="title">The tutorial has been deleted you can only access the URL</label>
         <input
           type="text"
           className="form-control"
-          id="description"
-          name="description"
-          value={currentTutorial.description}
+          id="url"
+          name="url"
+          readOnly
+          value={currentTutorial.url}
           onChange={handleInputChange}
         />
-      </div>
+      </div> }
+    
 
   </div>
 ) : (

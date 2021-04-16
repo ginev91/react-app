@@ -10,7 +10,8 @@ const TutorialsList = () => {
   const [currentIndex, setCurrentIndex] = useState(-1);
 
   
-  const [tutorials, loading, error] = useList(TutorialDataService.getDeleted());
+  const [tutorials, loading, error] = useList(TutorialDataService.getAll());
+  console.log(tutorials);
 
  
 
@@ -20,27 +21,22 @@ const TutorialsList = () => {
   };
 
   const setActiveTutorial = (tutorial, index) => {
-    const { title, description, published } = tutorial.val();
+    const { title, description, published, deleted, author,url } = tutorial.val();
 
     setCurrentTutorial({
       key: tutorial.key,
       title,
       description,
       published,
+      deleted,
+      author,
+      url
     });
 
     setCurrentIndex(index);
   };
 
-  const removeAllTutorials = () => {
-    TutorialDataService.removeAll()
-      .then(() => {
-        refreshList();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
+
 
   return (
     <div className="list row">
@@ -53,23 +49,18 @@ const TutorialsList = () => {
           {!loading &&
             tutorials &&
             tutorials.map((tutorial, index) => (
+              
               <li
                 className={"list-group-item " + (index === currentIndex ? "active" : "")}
                 onClick={() => setActiveTutorial(tutorial, index)}
                 key={index}
-              >
+              > 
                 {tutorial.val().title}
                 {/* tutorial.title */}
               </li>
             ))}
         </ul>
 
-        <button
-          className="m-3 btn btn-sm btn-danger"
-          onClick={removeAllTutorials}
-        >
-          Remove All
-        </button>
       </div>
       <div className="col-md-6">
         {currentTutorial ? (

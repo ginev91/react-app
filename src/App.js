@@ -7,9 +7,10 @@ import Register from "./components/Register";
 import { useAuth } from "./contexts/AuthContext"
 import firebase from "firebase";
 import AddTutorial from "./components/AddTutorial";
-import TutorialsList from "./components/TutorialsList";
+import AboutUs from "./components/AboutUs";
 import MyTutorials from "./components/MyTutorials";
 import DeletedTutorials from "./components/DeletedTutorials";
+import TutorialsList from "./components/TutorialsList";
 
 
   
@@ -24,7 +25,7 @@ function App() {
 
     try {
       await logout()
-      history.push("/")
+      history.push("/tutorials")
     } catch {
       setError("Failed to log out")
     }
@@ -35,14 +36,14 @@ function App() {
   return (
     
     <div>
-      <nav className="navbar navbar-expand-sm bg-primary navbar-dark">
-        <a href="/tutorials" className="navbar-brand">
-          Exam-tutorials
+      <nav className="navbar navbar-expand-lg bg-primary navbar-dark container-fluid ">
+        <a href="/AboutUs" className="navbar-brand">
+          About the App
         </a>
 
         {user  ?
 
-<div className="navbar-nav mr-auto">
+<div className=" container-fluid navbar-nav mr-auto">
 <li className="nav-item">
   <Link to={"/tutorials"} className="nav-link">
     Tutorials
@@ -64,15 +65,13 @@ function App() {
   </Link>
 </li>
 
-
-<li className="nav-item">
-  <Link to={"/tutorials"} className="nav-link">
-  <button className="nav-item" onClick={handleLogout} type="submit">
+<li className="ml-auto nav-item" >
+  <Link to={"/tutorials"} className="nav-link" >
+  <button  className="nav-item btn btn-danger" onClick={handleLogout} type="submit">
     Log Out
     </button>
   </Link>
 </li>
-
 
 
 
@@ -114,7 +113,8 @@ function App() {
       <div className="container mt-3">
         <h2>Tutorials app</h2>
         <Switch>
-          <Route exact path={["/", "/tutorials"]} component={TutorialsList} />
+           <Route exact path={["/", "/tutorials"]} component={TutorialsList} />  
+          <Route exact path="/AboutUs" component={AboutUs} />
           <Route exact path="/add" component={AddTutorial} />
           <Route exact path="/Login" component={Login} />
           <Route exact path="/Register" component={Register} />

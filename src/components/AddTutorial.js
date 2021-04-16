@@ -11,7 +11,8 @@ const AddTutorial = () => {
     description: "",
     published: false,
     deleted: false,
-    author: ""
+    author: "",
+    url : ""
   };
   const [tutorial, setTutorial] = useState(initialTutorialState);
   const [submitted, setSubmitted] = useState(false);
@@ -27,7 +28,8 @@ const AddTutorial = () => {
       description: tutorial.description,
       published: false,
       deleted: false,
-      author: user.email
+      author: user.email,
+      url: tutorial.url
 
     };
    
@@ -52,7 +54,7 @@ const AddTutorial = () => {
         <div>
           <h4>You submitted successfully!</h4>
           <button className="btn btn-success" onClick={newTutorial}>
-            Add
+            Add  New Tutorial
           </button>
         </div>
       ) : (
@@ -70,16 +72,29 @@ const AddTutorial = () => {
             />
           </div>
 
-          <div className="form-group">
+          <div className="form-group flex">
             <label htmlFor="description">Description</label>
-            <input
-              type="text"
+            <textarea  multiline="true" numberoflines={10} numberofcols={5} style={{height:300}}
+              type="textarea"
               className="form-control"
-              id="description"
               required
+              id="description"
               value={tutorial.description}
               onChange={handleInputChange}
               name="description"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="url">Tutorial URL</label>
+            <input
+              type="text"
+              className="form-control"
+              id="url"
+              required
+              value={tutorial.url}
+              onChange={handleInputChange}
+              name="url"
             />
           </div>
 

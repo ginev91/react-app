@@ -23,31 +23,26 @@ const DeletedTutorials = () => {
   };
 
   const setActiveTutorial = (tutorial, index) => {
-    const { title, description, published } = tutorial.val(); /* tutorial */
+    const {title, description, published, deleted, author , url} = tutorial.val(); /* tutorial */
 
     setCurrentTutorial({
       key: tutorial.key,
       title,
       description,
       published,
+      deleted,
+      author,
+      url
     });
 
     setCurrentIndex(index);
   };
 
-  const removeAllTutorials = () => {
-    TutorialDataService.removeAll()
-      .then(() => {
-        refreshList();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
+  
 
   return (
-    <div className="list row">
-      <div className="col-md-6">
+    <div className="row">
+      <div className="col">
         <h4>Tutorials List</h4>
 
         {error && <strong>Error: {error}</strong>}
@@ -62,19 +57,13 @@ const DeletedTutorials = () => {
                 key={index}
               >
                 {tutorial.val().title}
-                {/* tutorial.title */}
+           
               </li>
             ))}
         </ul>
 
-        <button
-          className="m-3 btn btn-sm btn-danger"
-          onClick={removeAllTutorials}
-        >
-          Remove All
-        </button>
       </div>
-      <div className="col-md-6">
+      <div className="col">
         {currentTutorial ? (
           <Tutorial tutorial={currentTutorial} refreshList={refreshList} />
         ) : (

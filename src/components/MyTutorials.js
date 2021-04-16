@@ -25,7 +25,7 @@ const MyTutorials = () => {
   };
 
   const setActiveTutorial = (tutorial, index) => {
-    const { title, description, published, deleted, author } = tutorial.val(); /* tutorial */
+    const { title, description, published, deleted, author, url } = tutorial.val(); /* tutorial */
 
     setCurrentTutorial({
       key: tutorial.key,
@@ -33,7 +33,8 @@ const MyTutorials = () => {
       description,
       published,
       deleted,
-      author
+      author,
+      url
     });
 
     setCurrentIndex(index);
@@ -77,12 +78,7 @@ const MyTutorials = () => {
             ))}
         </ul>
 
-        <button
-          className="m-3 btn btn-sm btn-danger"
-          onClick={removeAllTutorials}
-        >
-          Remove All
-        </button>
+  
       </div>
       <div className="col-md-6">
         {currentTutorial ? (

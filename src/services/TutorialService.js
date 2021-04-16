@@ -3,7 +3,8 @@ import firebase from "../firebase";
 const db = firebase.ref("/tutorials");
 
 const getAll = () => {
-  return db;
+  let published = db.orderByChild("published").equalTo(true);
+    return published;
 };
 
 const getMy = (author) => {
